@@ -183,6 +183,12 @@ artea_ab$instagram <- ifelse(artea_ab$channel_acq == 3, 1, 0)
 artea_ab$other <- ifelse(artea_ab$channel_acq == 5, 1, 0)
 artea_ab$referral <- ifelse(artea_ab$channel_acq == 4, 1, 0)
 
+#artea_ab = artea_ab %>% 
+#  mutate_at(vars(trans_after,revenue_after,num_past_purch,spent_last_purchase,
+#                 weeks_since_visit, browsing_minutes),as.numeric) %>% 
+#  mutate_at(vars(id,minority,female,test_coupon, channel_acq, shopping_cart),
+#            as.factor)
+
 ################# correlation within data ##########################################
 # transaction after
 cor(artea_ab$trans_after, artea_ab$revenue_after, method = 'spearman')
@@ -321,14 +327,15 @@ summary(model3)
 #################################################################################
 ############## Considering shopping cart * test coupon for regression ###########
 
-artea_ab$coup_cart = artea_ab$test_coupon * artea_ab$shopping_cart 
+artea_ab$coup_cart = (artea_ab$test_coupon * artea_ab$shopping_cart) 
 model4 = lm(revenue_after ~ 
               test_coupon+
-              facebook+
-              google+
-              instagram+
-              other+
-              referral+
+              channel_acq+
+              #facebook+
+              #google+
+              #instagram+
+              #other+
+              #referral+
               num_past_purch+
               spent_last_purchase+
               weeks_since_visit+
@@ -587,6 +594,83 @@ sapply(test_data, class)
 pred1 <- predict(model12, test_data)
 pred2 <- predict(model12, test_data)
 pred3 <- predict(model12, test_data)
+
+sum(pred1)
+sum(pred2)
+sum(pred3)
+
+### model13 (facebook+cart)
+artea_ab$face_cart = (artea_ab$facebook * artea_ab$shopping_cart) 
+model13 = lm(revenue_after ~ 
+              test_coupon+
+              channel_acq+
+              facebook+
+              google+
+              instagram+
+              other+
+              referral+
+              num_past_purch+
+              spent_last_purchase+
+              weeks_since_visit+
+              browsing_minutes+
+              shopping_cart+
+              face_cart , 
+            data = artea_ab)
+
+summary(model13)
+
+test_data$test_coupon = 1
+test_data$test_coupon = 0
+test_data$test_coupon = ifelse(test_data$facebook == 1 & test_data$shopping_cart > 1, 1, 0)
+
+test_data$face_cart = 1
+test_data$face_cart = 0
+test_data$face_cart = ifelse(test_data$facebook == 1 & test_data$shopping_cart > 1, 1, 0)
+
+sapply(test_data, class)
+
+pred1 <- predict(model13, test_data)
+pred2 <- predict(model13, test_data)
+pred3 <- predict(model13, test_data)
+
+sum(pred1)
+sum(pred2)
+sum(pred3)
+
+## model 14 (instagram + cart)
+
+artea_ab$insta_cart = (artea_ab$instagram * artea_ab$shopping_cart) 
+model14 = lm(revenue_after ~ 
+              test_coupon+
+              channel_acq+
+              facebook+
+              google+
+              instagram+
+              other+
+              referral+
+              num_past_purch+
+              spent_last_purchase+
+              weeks_since_visit+
+              browsing_minutes+
+              shopping_cart+
+              insta_cart, 
+            data = artea_ab)
+
+summary(model14)
+
+test_data$test_coupon = 1
+test_data$test_coupon = 0
+test_data$test_coupon = ifelse(test_data$instagram == 1 & test_data$shopping_cart > 0, 1, 0)
+
+test_data$insta_cart = 1
+test_data$insta_cart = 0
+test_data$insta_cart = ifelse(test_data$instagram == 1 & test_data$shopping_cart > 0, 1, 0)
+
+sapply(test_data, class)
+
+pred1 <- predict(model14, test_data)
+pred2 <- predict(model14, test_data)
+pred3 <- predict(model14, test_data)
 
 sum(pred1)
 sum(pred2)
