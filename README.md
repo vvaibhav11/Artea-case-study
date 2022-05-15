@@ -1,6 +1,6 @@
 # Artea case
 
-Objective: Designing Targeting Strategies for Artea with quantitative and qualitative analysis. Further exploratory data analysis, hypothesis testing and linear algortihms were used for making prediction whether coupon discount to specific group work or not. Also, customers to target, potential risks and demographoc analysis were done with recommendations
+Objective: Designing Targeting Strategies for Artea with quantitative and qualitative analysis. Further exploratory data analysis, hypothesis testing and linear algortihms were used for making prediction whether coupon discount to specific group work or not. Also, customers to target, potential risks and demographic analysis were done with recommendations
 
 Main script: artea_case_script
 
